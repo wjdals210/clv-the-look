@@ -1,4 +1,5 @@
 import pandas as pd
+import lifetimes
 
 def data_cleaning(order_items_df):
     '''
