@@ -17,7 +17,8 @@ def data_cleaning(order_items_df, orders_df):
 
 def rfm(cleaned_order_items_df):
     '''
-    This function takes the cleaned order_items dataframe and outputs the Recency, Frequency and Tenure dataframe
+    This function takes the cleaned orders dataframe and converts it a Recency-Frequency-Tenure dataframe
+    This rfm dataframe is appropriate for passing to the Beta-Geometric model
     '''
     return summary_data_from_transaction_data(transactions = cleaned_order_items_df,
                                               customer_id_col = 'user_id',
