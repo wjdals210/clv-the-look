@@ -1,0 +1,8 @@
+pandas
+seaborn
+lifetimes
+sklearn.cluster
+sklearn.metrics
+matplotlib.pyplot
+decimal
+datetime
