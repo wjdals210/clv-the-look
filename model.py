@@ -1,4 +1,5 @@
 from lifetimes import BetaGeoFitter
+from lifetimes import GammaGammaFitter
 
 def train_model(cleaned_rfm_train_df):
     '''
@@ -9,5 +10,11 @@ def train_model(cleaned_rfm_train_df):
     model.fit(cleaned_rfm_train_df['frequency_cal'],
               cleaned_rfm_train_df['recency_cal'],
               cleaned_rfm_train_df['T_cal'])
-    print("✅ Model initialized")
+    print("✅ ß-Geo Model trained")
     return model
+
+def train_ggmodel(filtered_rfm_df):
+    gg_model = GammaGammaFitter()
+    gg_model.fit(filtered_rfm_df['frequency'], filtered_rfm_df['monetary_value'])
+    print("✅ γγ Model trained")
+    return gg_model
