@@ -18,7 +18,7 @@ def train_bgmodel(cleaned_separated_rfm_df):
 
 def train_ggmodel(filtered_rfm_df):
     '''
-    Function to fit the gamma-gamma model to the
+    Function to fit the gamma-gamma model to the calibration/holdout dataset (with zeros removed)
     '''
 
     gg_model = GammaGammaFitter()
