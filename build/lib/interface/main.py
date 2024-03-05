@@ -1,7 +1,7 @@
 import pandas as pd
 from lifetimes.utils import calibration_and_holdout_data
-from data import *
-from model import *
+from clv_the_look.preprocess.data import *
+from clv_the_look.training.model import *
 
 def cal_hold_separation(clean_df):
     '''
