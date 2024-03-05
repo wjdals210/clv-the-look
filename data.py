@@ -12,7 +12,7 @@ def data_cleaning(order_items_df, orders_df):
     cleaned_order_sales = order_sales.merge(orders_df[['order_id','user_id','created_at']]).set_index('order_id')
 
     cleaned_order_sales['created_at'] = pd.to_datetime(cleaned_order_sales['created_at'],
-                                                       format='mixed')
+                                                       format='mixed').dt.tz_localize(None)
 
     return cleaned_order_sales
 
