@@ -1,11 +1,12 @@
 from lifetimes import BetaGeoFitter
 from lifetimes import GammaGammaFitter
 
-def train_bgmodel(cleaned_separated_rfm_df):
+def train_bg_model(cleaned_separated_rfm_df):
     '''
     Function to fit the Beta-Geometric model on the cleaned, calibration/holdout dataset
     (which has been converted to rfm)
     '''
+
     pen_coef_ = 0.001
     bg_model = BetaGeoFitter(penalizer_coef=pen_coef_)
     bg_model.fit(cleaned_separated_rfm_df['frequency_cal'],
@@ -16,7 +17,7 @@ def train_bgmodel(cleaned_separated_rfm_df):
 
     return bg_model
 
-def train_ggmodel(filtered_rfm_df):
+def train_gg_model(filtered_rfm_df):
     '''
     Function to fit the gamma-gamma model to the calibration/holdout dataset (with zeros removed)
     '''

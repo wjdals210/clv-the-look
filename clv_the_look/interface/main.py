@@ -1,5 +1,7 @@
 import pandas as pd
 from lifetimes.utils import calibration_and_holdout_data
+from data import *
+from model import *
 
 def cal_hold_separation(clean_df):
     '''
@@ -28,12 +30,14 @@ def cal_hold_separation(clean_df):
 def clv(gg_model,bg_model,rfm_df):
     '''
     Function to output the 'customer lifetime value' for the next 3 months given:
-    an input rfm dataframe, a gamma-gamma model and beta-geo model
+    an input rfm dataframe;
+    a gamma-gamma model; and
+    a beta-geo model
     '''
     gg_model.customer_lifetime_value(bg_model,
-                                    rfm_df['frequency'],
-                                    rfm_df['recency'],
-                                    rfm_df['T'],
-                                    rfm_df['monetary_value'],
-                                    time = 3,# In months
-                                    )
+                                     rfm_df['frequency'],
+                                     rfm_df['recency'],
+                                     rfm_df['T'],
+                                     rfm_df['monetary_value'],
+                                     time = 3,# In months
+                                     )
