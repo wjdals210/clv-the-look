@@ -60,7 +60,7 @@ def order_features(orders_df, order_items_df, split_date):
     orders_df['days_delivery'] = (orders_df['delivered_at'] - orders_df['created_at']).dt.days
 
     # Filter data only for last 2 years
-    orders_df = orders_df[(orders_df.days_to_split_date >= 0) & (orders_df.days_to_split_date < 365*2)]
+    orders_df = orders_df[(orders_df.days_to_split_date >= 0) & (orders_df.days_to_split_date < 365*3)]
 
     # Base dataset : user level
     base = orders_df[['user_id','order_id']].groupby('user_id').count().rename(columns={'order_id': 'orders_total'})
@@ -123,6 +123,21 @@ def order_features(orders_df, order_items_df, split_date):
     avg_items_p_order = orders_df[['user_id','num_of_item']].groupby('user_id').mean().rename(columns={'num_of_item': 'avg_num_items'})
     base = base.merge(avg_items_p_order, on='user_id')
 
+    # Fill NA with 0 for selected columns
+    selected_columns = ['orders_total',
+              'orders_30d',
+              'orders_60d',
+              'orders_120d',
+              'orders_240d',
+              'orders_480d',
+              'revenue_30d',
+              'revenue_60d',
+              'revenue_120d',
+              'revenue_240d',
+              'revenue_480d']
+
+    base[selected_columns] = base[selected_columns].fillna(0)
+
     return base
 
 def join_tables_item_level(order_items_df, products_df):
@@ -165,7 +180,7 @@ def calc_product_features(item_level_df, split_date):
     '''
 
     # filter data only for last 2 years
-    min_date = split_date - pd.DateOffset(days=365*2)
+    min_date = split_date - pd.DateOffset(days=365*3)
     item_level_df = item_level_df[(item_level_df['created_at'] <= split_date) & (item_level_df['created_at'] > min_date)].copy()
 
     # Calculate the first orders
@@ -174,40 +189,45 @@ def calc_product_features(item_level_df, split_date):
 
     base = item_level_df[['user_id','order_item_id']].groupby('user_id').count().fillna(0).rename(columns={'order_item_id':'num_order_item'})
 
-    # taking value for the very first order
-    intial_values = item_level_df[item_level_df['order_rank']==1][['user_id','category','brand']].rename(columns={'category':'categ_initial',
-                                                                                                                  'brand':'brand_initial'})
-    base = base.merge(intial_values, on='user_id', how='left')
+    # # taking value for the very first order
+    # intial_values = item_level_df[item_level_df['order_rank']==1][['user_id','category','brand']].rename(columns={'category':'categ_initial',
+    #                                                                                                               'brand':'brand_initial'})
+    # base = base.merge(intial_values, on='user_id', how='left')
 
-    # taking value for the very last order
-    last_values = item_level_df[item_level_df['order_rank_desc']==1][['user_id','category','brand']].rename(columns={'category':'categ_last',
-                                                                                                                  'brand':'brand_last'})
-    base = base.merge(last_values, on='user_id', how='left')
+    # # taking value for the very last order
+    # last_values = item_level_df[item_level_df['order_rank_desc']==1][['user_id','category','brand']].rename(columns={'category':'categ_last',
+    #                                                                                                               'brand':'brand_last'})
+    # base = base.merge(last_values, on='user_id', how='left')
 
-    item_level_df = item_level_df.rename(columns={'created_at':'order_item_created_at'})
+    # item_level_df = item_level_df.rename(columns={'created_at':'order_item_created_at'})
 
-    # Most frequent brand and category (later)
-    # mode_values = item_level_df[item_level_df['order_rank']==1][['user_id','category','brand']].rename(columns={'category':'categ_initial',
-                                                                                                                  # 'brand':'brand_initial'})
+    # Most frequent brand
+    count_brands = item_level_df.groupby(['user_id', 'brand']).size().reset_index(name='count')
+    idx = count_brands.groupby(['user_id'])['count'].transform('max') == count_brands['count']
+    preffered_brand = count_brands[idx].drop(columns='count').rename(columns={'brand':'brand_preffered'})
+
+    base = base.merge(preffered_brand, on='user_id', how='left')
+
+    # Most frequent category
+    count_cat = item_level_df.groupby(['user_id', 'category']).size().reset_index(name='count')
+    idx = count_cat.groupby(['user_id'])['count'].transform('max') == count_cat['count']
+    preffered_cat = count_cat[idx].drop(columns='count').rename(columns={'category':'category_preffered'})
+
+    base = base.merge(preffered_cat, on='user_id', how='left')
+
     return base
 
-
 def select_user_columns(users_df, split_date):
-    '''
-    Select columns we want to use to predict clv from user df
-    '''
+
     df = users_df[['id','age','country','created_at']].rename(columns={'id':'user_id','created_at':'user_created_at'})
     # Filter users only for last 2 years from split date
-    min_date = split_date - pd.DateOffset(days=365*2)
+    # min_date = split_date - pd.DateOffset(days=365*5)
     df['user_created_at'] = pd.to_datetime(df['user_created_at'], format='mixed').dt.tz_localize(None)
-    df = df[(df['user_created_at'] <= split_date) & (df['user_created_at'] > min_date)]
+    df = df[(df['user_created_at'] <= split_date)]
 
     return df
 
 def create_y_actual(order_items_df, split_date):
-    '''
-    Calculates our target value per user
-    '''
     df = order_items_df[['id','user_id','created_at','sale_price']].copy().rename(columns={'id':'order_item_id'})
     df['order_created_at'] = pd.to_datetime(df['created_at'], format='mixed').dt.tz_localize(None)
 
@@ -222,7 +242,7 @@ def create_y_actual(order_items_df, split_date):
 
 def prep_input_dataset(df_user, df_order, df_item, df_y_actual):
     '''
-    joins all preprocessed user-level-df and y_actual
+    joins all preprocessed user-level-df
     '''
 
     final_df = df_user.merge(df_order, on='user_id', how='left')
