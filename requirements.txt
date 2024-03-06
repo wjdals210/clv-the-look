@@ -4,3 +4,6 @@ lifetimes
 scikit-learn
 matplotlib
 datetime
+streamlit
+glob
+os

@@ -1,43 +1,27 @@
 import pandas as pd
-from lifetimes.utils import calibration_and_holdout_data
 from clv_the_look.preprocess.data import *
 from clv_the_look.training.model import *
+from clv_the_look.training.registry import load_models
 
-def cal_hold_separation(clean_df):
-    '''
-    A function to separate the time dataframe into calibration and holdout (train and test) datasets
-    '''
+# call the load_models function which loads the two pickled models, required for the baseline:
+# beta-geo model and gamma-gamma model
+trained_bg_model, trained_gg_model = load_models()
 
-    # Define the calibration and holdout ranges
-    cal_start = pd.to_datetime('2019-01-01')
-    cal_end = pd.to_datetime('2020-12-31')
-    hold_end = pd.to_datetime('2021-03-31')
+##################  TEST WITH A NEW USER  ##################
 
-    # get the subset of the data, restricted by calibration period plus holdout period
-    clean_df_subset = clean_df[(clean_df.created_at>=cal_start) & (clean_df.created_at<=hold_end)]
+new_user = pd.DataFrame(columns=['sale_price', 'user_id', 'created_at'])
+new_user.loc[0] = {'sale_price':45,'user_id':'X','created_at':'2020-08-30 08:26:00'}
+new_user.loc[1] = {'sale_price':70,'user_id':'X','created_at':'2020-09-07 08:26:00'}
+new_user_rfm = rfm(new_user)
 
-    # use the calibration_and_holdout_data method in lifetimes package to separate the time series data
-    separated_df = calibration_and_holdout_data(transactions=clean_df_subset,
-                                                customer_id_col="user_id",
-                                                datetime_col = "created_at",
-                                                monetary_value_col= 'sale_price',
-                                                calibration_period_end=cal_end,
-                                                observation_period_end=hold_end)
+############################################################
 
-    return separated_df
+new_CLV = trained_gg_model.customer_lifetime_value(trained_bg_model,
+                                                   new_user_rfm['frequency'],
+                                                   new_user_rfm['recency'],
+                                                   new_user_rfm['T'],
+                                                   new_user_rfm['monetary_value'],
+                                                   time = 3,# In months
+                                                   )
 
-
-def clv(gg_model,bg_model,rfm_df):
-    '''
-    Function to output the 'customer lifetime value' for the next 3 months given:
-    an input rfm dataframe;
-    a gamma-gamma model; and
-    a beta-geo model
-    '''
-    gg_model.customer_lifetime_value(bg_model,
-                                     rfm_df['frequency'],
-                                     rfm_df['recency'],
-                                     rfm_df['T'],
-                                     rfm_df['monetary_value'],
-                                     time = 3,# In months
-                                     )
+print(f"Estimated value of this user in the next three months is {round(new_CLV[0],2)}")
