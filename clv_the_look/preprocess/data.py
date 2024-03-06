@@ -10,7 +10,7 @@ def data_cleaning(order_items_df, orders_df):
     # Agreegate the sale_price by order_id and merge the orders table
     order_sales = order_items_df[['order_id','sale_price']].groupby(by='order_id').sum('sale_price').reset_index()
 
-    cleaned_order_sales = orders_df.merge(order_sales, on='order_id', how='left').set_index('order_id')
+    cleaned_order_sales = orders_df.merge(order_sales, on='order_id', how='left')
 
     # Convert the created_at column from 'object' to datetime64
     cleaned_order_sales['created_at'] = pd.to_datetime(cleaned_order_sales['created_at'],
@@ -94,7 +94,7 @@ def order_features(split_date, orders_df, order_items_df, products_df):
     m_120 = df_120[['user_id','sale_price']].groupby(by='user_id').sum().rename(columns={'sale_price': 'revenue_120d'})
     m_240 = df_240[['user_id','sale_price']].groupby(by='user_id').sum().rename(columns={'sale_price': 'revenue_240d'})
     m_480 = df_480[['user_id','sale_price']].groupby(by='user_id').sum().rename(columns={'sale_price': 'revenue_480d'})
-    m_total = df[['user_id','sale_price']].groupby(by='user_id').sum().rename(columns={'sale_price': 'revenue_total'})
+    m_total = orders_df[['user_id','sale_price']].groupby(by='user_id').sum().rename(columns={'sale_price': 'revenue_total'})
 
     # Monetary Joined to base dataset
     base = base.merge(m_30,on='user_id',how='left')
