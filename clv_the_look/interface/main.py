@@ -24,4 +24,4 @@ new_CLV = trained_gg_model.customer_lifetime_value(trained_bg_model,
                                                    time = 3,# In months
                                                    )
 
-print(f"Estimated value of this user in the next three months is {round(new_CLV[0],2)}")
+print(f"\nEstimated value of this user in the next three months is {round(new_CLV[0],2)}\n")
