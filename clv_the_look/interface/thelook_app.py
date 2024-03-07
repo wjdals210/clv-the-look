@@ -1,24 +1,33 @@
 import streamlit as st
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 
 # import plotly.express as px  #interactive charts
 
+currentfile = os.path.abspath(__file__)
+currentdir = os.path.dirname(currentfile)
+
+eventsfile = os.path.join(currentdir, "..", "..", "raw_data", "events.csv")
+d_centersfile =os.path.join(currentdir, "..", "..", "raw_data", "distribution_centers.csv")
+inventoryfile=os.path.join(currentdir, "..", "..", "raw_data", "inventory_items.csv")
+order_itemsfile=os.path.join(currentdir, "..", "..", "raw_data", "order_items.csv")
+ordersfile=os.path.join(currentdir, "..", "..", "raw_data", "orders.csv")
+usersfile=os.path.join(currentdir, "..", "..", "raw_data", "users.csv")
+productsfile=os.path.join(currentdir, "..", "..", "raw_data", "products.csv")
 
 # Load the dataset
-#@st.cache
 @st.cache_resource
-
 def load_data():
      data = {
 
-         "Events": pd.read_csv(r'/home/datascience/code/wjdals210/clv-the-look/raw_data/events.csv'),
-         "Inventory_items": pd.read_csv(r"/home/datascience/code/wjdals210/clv-the-look/raw_data/inventory_items.csv"),
-         "Order_items": pd.read_csv(r"/home/datascience/code/wjdals210/clv-the-look/raw_data/order_items.csv"),
-         "D_centers": pd.read_csv(r"/home/datascience/code/wjdals210/clv-the-look/raw_data/distribution_centers.csv"),
-         "Orders": pd.read_csv(r"/home/datascience/code/wjdals210/clv-the-look/raw_data/orders.csv"),
-         "Users": pd.read_csv(r"/home/datascience/code/wjdals210/clv-the-look/raw_data/users.csv"),
-         "Products": pd.read_csv(r"/home/datascience/code/wjdals210/clv-the-look/raw_data/products.csv")
+         "Events":pd.read_csv(eventsfile),
+         "Inventory_items": pd.read_csv(inventoryfile),
+         "Order_items": pd.read_csv(order_itemsfile),
+         "D_centers": pd.read_csv(d_centersfile),
+         "Orders": pd.read_csv(ordersfile),
+         "Users": pd.read_csv(usersfile),
+         "Products": pd.read_csv(productsfile)
      }
      return data
 
