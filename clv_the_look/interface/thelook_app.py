@@ -1,81 +1,79 @@
 import streamlit as st
-import os
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
+#from preprocess.preprocessor import preprocess_data  # Import preprocessing function
+#from training import predict_clv  # Import predict_clv function
+#from training.model import load_model  # Import load_model function
 
-# import plotly.express as px  #interactive charts
+# Dummy functions for testing
 
-currentfile = os.path.abspath(__file__)
-currentdir = os.path.dirname(currentfile)
+# Dummy preprocess_data function
+def preprocess_data(df):
+    # Dummy preprocessing
+    processed_data = df.dropna()  # Drop rows with missing values
+    return processed_data
 
-eventsfile = os.path.join(currentdir, "..", "..", "raw_data", "events.csv")
-d_centersfile =os.path.join(currentdir, "..", "..", "raw_data", "distribution_centers.csv")
-inventoryfile=os.path.join(currentdir, "..", "..", "raw_data", "inventory_items.csv")
-order_itemsfile=os.path.join(currentdir, "..", "..", "raw_data", "order_items.csv")
-ordersfile=os.path.join(currentdir, "..", "..", "raw_data", "orders.csv")
-usersfile=os.path.join(currentdir, "..", "..", "raw_data", "users.csv")
-productsfile=os.path.join(currentdir, "..", "..", "raw_data", "products.csv")
+# Dummy load_model function
+def load_model():
+    # Dummy model loading
+    return "Dummy Model"
 
-# Load the dataset
-@st.cache_resource
-def load_data():
-     data = {
-
-         "Events":pd.read_csv(eventsfile),
-         "Inventory_items": pd.read_csv(inventoryfile),
-         "Order_items": pd.read_csv(order_itemsfile),
-         "D_centers": pd.read_csv(d_centersfile),
-         "Orders": pd.read_csv(ordersfile),
-         "Users": pd.read_csv(usersfile),
-         "Products": pd.read_csv(productsfile)
-     }
-     return data
-
- # Display the data
-def display_data(data, table_name, columns, filter_column, filter_value):
-    df = data[table_name]
-
-     # Filter data
-    if filter_column and filter_value:
-        df = df[df[filter_column] == filter_value]
-
-     # Select columns
-    if columns:
-        df = df[columns]
-    # Display first few rows of the DataFrame
-    st.write(f"First few rows of {table_name}:")
-    st.write(df.head())
+# Dummy predict_clv function
+def predict_clv(model, processed_data):
+    # Dummy prediction
+    predictions = pd.DataFrame({
+        'Customer ID': processed_data['Customer ID'],
+        'Predicted CLV': [1000, 1500, 800, 1200]  # Dummy predicted CLV values
+    })
+    return predictions
 
 def main():
     st.markdown("<h1 style='text-align: center; color: white;'>TheLook eCommerce Dataset Explorer </h1>", unsafe_allow_html=True)
     #st.title("TheLook eCommerce Dataset Explorer")
 
-     # Load data
-    data = load_data()
-     # Sidebar - Table selection
-    table_name = st.sidebar.selectbox("Select Table", list(data.keys()))
+    # File upload section
+    st.sidebar.header("Upload CSV File")
+    uploaded_file = st.sidebar.file_uploader("Upload your CSV file", type=["csv"])
 
-     # Sidebar - Column selection
-    columns = st.sidebar.multiselect("Select Columns", data[table_name].columns)
-#     # Sidebar - Filter
-    filter_column = st.sidebar.selectbox("Filter Column (Optional)", data[table_name].columns.insert(0, ""))
-    filter_value = st.sidebar.text_input("Filter Value")
-#     # Display data
-    if st.sidebar.button("Refresh Data"):
-        data = load_data()  # Reload data
-    display_data(data, table_name, columns, filter_column or None, filter_value or None)
+    # Check if file is uploaded
+    if uploaded_file is not None:
+        # Read the uploaded CSV file
+        df = pd.read_csv(uploaded_file)
+
+        # Display the uploaded data
+        st.write("Uploaded data:")
+        st.write(df)
+
+        # Preprocess the data
+        processed_data = preprocess_data(df)
+
+        # Load the trained model
+        model = load_model()
+
+        # Make predictions on preprocessed data
+        predictions = predict_clv(model, processed_data)
+
+        # Display predictions
+        st.write("Predictions:")
+        st.write(predictions)
+
+        # Plot CLV distribution
+        st.write("CLV Distribution Plot:")
+        plot_clv_distribution(predictions)
+
+    # When no file is uploaded
+    else:
+        st.write("Please upload a CSV file.")
+
+def plot_clv_distribution(predictions):
+    # Plot CLV distribution
+    plt.figure(figsize=(10, 6))
+    sns.histplot(predictions['Predicted CLV'], kde=True)
+    plt.xlabel('Predicted CLV')
+    plt.ylabel('Frequency')
+    plt.title('Distribution of Predicted CLV')
+    st.pyplot()
+
 if __name__ == "__main__":
     main()
-
-
-
-
-
-#create your figure and get the figure object returned
-#fig = plt.figure(figsize=(8, 6))
-
-fig = plt.figure(figsize=(8, 6))
-
-plt.plot([1, 2, 3, 4, 5])
-
-st.pyplot(fig)
