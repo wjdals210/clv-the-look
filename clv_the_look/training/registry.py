@@ -10,7 +10,7 @@ def load_models():
     """
 
     # Get the latest model version name by the timestamp on disk
-    local_model_directory = os.path.join(LOCAL_REGISTRY_PATH, "training")
+    local_model_directory = os.path.join(LOCAL_REGISTRY_PATH)
 
     print(f"\nLoad latest models...")
 
