@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 import seaborn as sns
 #from preprocess.preprocessor import preprocess_data  # Import preprocessing function
 #from training import predict_clv  # Import predict_clv function
@@ -10,7 +11,7 @@ import seaborn as sns
 
 # Dummy preprocess_data function
 def preprocess_data(df):
-    # Dummy preprocessing
+   # Dummy preprocessing
     processed_data = df.dropna()  # Drop rows with missing values
     return processed_data
 
@@ -52,8 +53,11 @@ def main():
         model = load_model()
 
         # Make predictions on preprocessed data
-        predictions = predict_clv(model, processed_data)
-
+        #predictions = predict_clv(model, processed_data)
+        predictions = pd.DataFrame({
+            'Customer ID': ['Cust1', 'Cust2', 'Cust3', 'Cust4'],
+            'Predicted CLV': np.random.normal(1000, 200, 4)
+        })
         # Display predictions
         st.write("Predictions:")
         st.write(predictions)
@@ -67,6 +71,11 @@ def main():
         st.write("Please upload a CSV file.")
 
 def plot_clv_distribution(predictions):
+    # Generate fake data for plotting
+    np.random.seed(0)
+    data = np.random.normal(1000, 200, 1000)
+
+
     # Plot CLV distribution
     plt.figure(figsize=(10, 6))
     sns.histplot(predictions['Predicted CLV'], kde=True)
