@@ -1,8 +1,9 @@
 pandas
 seaborn
 lifetimes
-sklearn.cluster
-sklearn.metrics
-matplotlib.pyplot
-decimal
+scikit-learn
+matplotlib
 datetime
+streamlit
+glob
+os
