@@ -8,7 +8,11 @@ from clv_the_look.preprocess.data import *
 
 app = FastAPI()
 
-
+@app.get("/")
+def root():
+    # $CHA_BEGIN
+    return dict(greeting="Hello - testing the local")
+    # $CHA_END
 
 @app.post('/predict')
 def upload_file(file: UploadFile = File(...)):
@@ -33,27 +37,3 @@ def upload_file(file: UploadFile = File(...)):
         'Prediction' : round(prediction, 2)
         }
     return results
-
-
-# preproces
-# load model
-# predict
-
-# @app.get("/predict_again")
-# async def read_csv():
-    # Path to your CSV file
-    csv_file = "orders.csv"
-
-    # Read CSV file into a pandas DataFrame
-    df = pd.read_csv(csv_file)
-
-    # Convert DataFrame to JSON format
-    data = df.to_json(orient="records")
-
-    return {"data": data}
-
-# @app.post("/users/")
-# async def create_user(name: str, email: str):
-    # Create a new user in the database with the provided name and email
-    # Return the newly created user information
-    return {"name": name, "email": email}

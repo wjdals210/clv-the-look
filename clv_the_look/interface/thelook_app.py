@@ -3,31 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+import requests
 #from preprocess.preprocessor import preprocess_data  # Import preprocessing function
 #from training import predict_clv  # Import predict_clv function
 #from training.model import load_model  # Import load_model function
-
-# Dummy functions for testing
-
-# Dummy preprocess_data function
-def preprocess_data(df):
-   # Dummy preprocessing
-    processed_data = df.dropna()  # Drop rows with missing values
-    return processed_data
-
-# Dummy load_model function
-def load_model():
-    # Dummy model loading
-    return "Dummy Model"
-
-# Dummy predict_clv function
-def predict_clv(model, processed_data):
-    # Dummy prediction
-    predictions = pd.DataFrame({
-        'Customer ID': processed_data['Customer ID'],
-        'Predicted CLV': [1000, 1500, 800, 1200]  # Dummy predicted CLV values
-    })
-    return predictions
 
 def main():
     st.markdown("<h1 style='text-align: center; color: white;'>TheLook eCommerce Dataset Explorer </h1>", unsafe_allow_html=True)
@@ -46,21 +25,13 @@ def main():
         st.write("Uploaded data:")
         st.write(df)
 
-        # Preprocess the data
-        processed_data = preprocess_data(df)
+        url = 'https://clvimage-k2idjtgthq-oe.a.run.app/predict'
+        df_new = df.to_json().encode()
+        response = requests.post(url, files={'file' : df_new})
 
-        # Load the trained model
-        model = load_model()
-
-        # Make predictions on preprocessed data
-        #predictions = predict_clv(model, processed_data)
-        predictions = pd.DataFrame({
-            'Customer ID': ['Cust1', 'Cust2', 'Cust3', 'Cust4'],
-            'Predicted CLV': np.random.normal(1000, 200, 4)
-        })
         # Display predictions
         st.write("Predictions:")
-        st.write(predictions)
+        st.write(response.json())
 
         # Plot CLV distribution
         st.write("CLV Distribution Plot:")
