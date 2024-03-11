@@ -1,4 +1,3 @@
-import glob
 import os
 from lifetimes import BetaGeoFitter
 from lifetimes import GammaGammaFitter
