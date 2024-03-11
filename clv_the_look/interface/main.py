@@ -9,8 +9,7 @@ rf_pipeline = load_rf_model()
 
 ##################  TEST WITH A NEW USER  ##################
 
-new_user = pd.read_csv('/Users/Ian/Downloads/input_X_test.csv').iloc[6:7,:]
-print(new_user)
+new_user = pd.read_csv('/Users/Ian/Downloads/input_X_test.csv').iloc[7:8,:]
 print(rf_pipeline.predict(new_user))
 
 ############################################################

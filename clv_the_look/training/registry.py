@@ -36,7 +36,7 @@ def load_rf_model():
 
     print(f"\nLoad latest random forest model")
 
-    latest_rf_model = joblib.load(os.path.join(local_model_directory, "rf_model_v1.pkl"))
+    latest_rf_model = joblib.load(os.path.join(local_model_directory, "rf_model_v2.pkl"))
 
     print(f"\n✅ Random-Forest pipeline loaded")
 
