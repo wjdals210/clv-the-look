@@ -10,7 +10,7 @@ app = FastAPI()
 @app.get("/")
 def root():
     # $CHA_BEGIN
-    return dict(greeting="Hello - testing the local")
+    return dict(greeting="Hello - retesting the local")
     # $CHA_END
 
 @app.post('/predict')
@@ -46,16 +46,9 @@ def upload_file(file: UploadFile = File(...)):
     df_json = json.loads(decoded_str) # Reading string and converting to json (dictionary)
     df = pd.DataFrame(df_json) # Reading dictionary and converting into dataframe
     rf_pipeline = load_rf_model()
+    prediction = rf_pipeline.predict(df)
 
-    new_CLV = gg_model.customer_lifetime_value(bg_model,
-                                                   df_rfm['frequency'],
-                                                   df_rfm['recency'],
-                                                   df_rfm['T'],
-                                                   df_rfm['monetary_value'],
-                                                   time = 3,# In months
-                                                   )
-    prediction = float(new_CLV.iloc[0])
     results = {
-        'Prediction' : round(prediction, 2)
+        'Prediction' : prediction
         }
     return results
