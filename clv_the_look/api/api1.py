@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi import UploadFile, File
-from pathlib import Path
 import json
 import pandas as pd
 from clv_the_look.training.registry import *

@@ -1,11 +1,12 @@
 import os
+import joblib
 from lifetimes import BetaGeoFitter
 from lifetimes import GammaGammaFitter
 from clv_the_look.params import *
 
 def load_models():
     """
-    Return pickled BetaGeo and GammaGamma models
+    Return unpickled BetaGeo and GammaGamma models
     """
 
     # Get the latest model version name by the timestamp on disk
@@ -24,3 +25,19 @@ def load_models():
     print(f"\n✅ γγ Model loaded")
 
     return latest_bg_model, latest_gg_model
+
+def load_rf_model():
+    """
+    Return unpickled random forest pipeline
+    """
+
+    # Get the latest model version name by the timestamp on disk
+    local_model_directory = os.path.join(LOCAL_REGISTRY_PATH)
+
+    print(f"\nLoad latest random forest model")
+
+    latest_rf_model = joblib.load(os.path.join(local_model_directory, "rf_model_v1.pkl"))
+
+    print(f"\n✅ Random-Forest pipeline loaded")
+
+    return latest_rf_model
