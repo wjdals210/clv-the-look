@@ -4,3 +4,5 @@ matplotlib
 requests
 seaborn
 numpy
+plotly
+plotly.express
