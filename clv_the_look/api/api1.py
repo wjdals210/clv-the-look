@@ -40,7 +40,6 @@ def upload_file(file: UploadFile = File(...)):
 @app.post('/rfpredict')
 def upload_file(file: UploadFile = File(...)):
     contents = file.file.read() # Reading content of 'myfile' in bytes
-    # print(contents)
     decoded_str = contents.decode('utf-8') # Decoding contents into str type
     # decoded_str = StringIO(contents.decode('utf-8')) # Alternative using StringIO
     df_json = json.loads(decoded_str) # Reading string and converting to json (dictionary)
@@ -48,7 +47,12 @@ def upload_file(file: UploadFile = File(...)):
     rf_pipeline = load_rf_model()
     prediction = rf_pipeline.predict(df)
 
+    if prediction[0] == 0:
+        outcome = "This customer will not purchase again in the next x months"
+    elif prediction[0] == 1:
+        outcome = "This customer should purchase again in the next x months"
+
     results = {
-        'Prediction' : prediction
+        'Prediction' : outcome
         }
     return results

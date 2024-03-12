@@ -28,16 +28,16 @@ def load_models():
 
 def load_rf_model():
     """
-    Return unpickled random forest pipeline
+    Return unpickled XGBoost pipeline
     """
 
     # Get the latest model version name by the timestamp on disk
     local_model_directory = os.path.join(LOCAL_REGISTRY_PATH)
 
-    print(f"\nLoad latest random forest model")
+    print(f"\nLoad latest XGBoost model")
 
     latest_rf_model = joblib.load(os.path.join(local_model_directory, "rf_model_v2.pkl"))
 
-    print(f"\n✅ Random-Forest pipeline loaded")
+    print(f"\n✅ XGBoost pipeline loaded")
 
     return latest_rf_model
