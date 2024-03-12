@@ -32,7 +32,7 @@ def main():
 
         # Display predictions
         st.write("Predictions:")
-        st.write(response.json())
+        st.write(response.json()['Prediction'])
 
         # # Plot CLV distribution
         # st.write("CLV Distribution Plot:")
