@@ -37,7 +37,7 @@ def upload_file(file: UploadFile = File(...)):
         }
     return results
 
-@app.post('/rfpredict')
+@app.post('/gbpredict')
 def upload_file(file: UploadFile = File(...)):
     contents = file.file.read() # Reading content of 'myfile' in bytes
     decoded_str = contents.decode('utf-8') # Decoding contents into str type
@@ -48,9 +48,9 @@ def upload_file(file: UploadFile = File(...)):
     prediction = rf_pipeline.predict(df)
 
     if prediction[0] == 0:
-        outcome = "This customer will not purchase again in the next x months"
+        outcome = "This customer will not purchase with us again"
     elif prediction[0] == 1:
-        outcome = "This customer should purchase again in the next x months"
+        outcome = "This customer should purchase with us again"
 
     results = {
         'Prediction' : outcome
