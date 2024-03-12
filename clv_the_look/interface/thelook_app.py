@@ -27,7 +27,6 @@ def main():
 
         url = 'https://clvimage-k2idjtgthq-oe.a.run.app/gbpredict'
         df_new = df.to_json().encode()
-        print(df_new)
         response = requests.post(url, files={'file' : df_new})
 
         # Display predictions
