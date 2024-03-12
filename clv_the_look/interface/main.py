@@ -9,8 +9,13 @@ rf_pipeline = load_rf_model()
 
 ##################  TEST WITH A NEW USER  ##################
 
-new_user = pd.read_csv('/Users/Ian/Downloads/input_X_test.csv').iloc[7:8,:]
-print(rf_pipeline.predict(new_user))
+new_user = pd.read_csv('/Users/Ian/Downloads/single_input_X_test.csv')
+prediction = rf_pipeline.predict(new_user)
+
+if prediction[0] == 0:
+    print("This customer will not purchase again in the next x months")
+elif prediction[0] == 1:
+    print("This customer should purchase again in the next x months")
 
 ############################################################
 

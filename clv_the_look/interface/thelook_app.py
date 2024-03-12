@@ -25,17 +25,18 @@ def main():
         st.write("Uploaded data:")
         st.write(df)
 
-        url = 'https://clvimage-k2idjtgthq-oe.a.run.app/predict'
+        url = 'http://0.0.0.0:8080/rfpredict'
         df_new = df.to_json().encode()
+        print(df_new)
         response = requests.post(url, files={'file' : df_new})
 
         # Display predictions
         st.write("Predictions:")
         st.write(response.json())
 
-        # Plot CLV distribution
-        st.write("CLV Distribution Plot:")
-        plot_clv_distribution(predictions)
+        # # Plot CLV distribution
+        # st.write("CLV Distribution Plot:")
+        # plot_clv_distribution(predictions)
 
     # When no file is uploaded
     else:
