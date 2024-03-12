@@ -19,7 +19,8 @@ alt.themes.enable("dark")
 
 #######################
 # Load data
-df_reshaped = pd.read_csv(os.path.join(ROOT_PATH,"/data/us-population-2010-2019-reshaped.csv'))
+data_path =os.path.join(ROOT_PATH,'data','us-population-2010-2019-reshaped.csv')
+df_reshaped = pd.read_csv(data_path)
 
 
 #######################
