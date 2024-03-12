@@ -25,7 +25,7 @@ def main():
         st.write("Uploaded data:")
         st.write(df)
 
-        url = 'http://0.0.0.0:8080/rfpredict'
+        url = 'https://clvimage-k2idjtgthq-oe.a.run.app/gbpredict'
         df_new = df.to_json().encode()
         print(df_new)
         response = requests.post(url, files={'file' : df_new})
