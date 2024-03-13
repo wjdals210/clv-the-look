@@ -1,16 +1,16 @@
 #######################
+#######################
 # Import libraries
 import streamlit as st
 import pandas as pd
 import altair as alt
 import plotly.express as px
-import os
 
 #######################
 # Page configuration
 st.set_page_config(
-    page_title="Analytics from THE LOOK",
-    page_icon="🩲",
+    page_title="US Population Dashboard",
+    page_icon="🏂",
     layout="wide",
     initial_sidebar_state="expanded")
 
@@ -19,14 +19,13 @@ alt.themes.enable("dark")
 
 #######################
 # Load data
-data_path =os.path.join(ROOT_PATH,'data','us-population-2010-2019-reshaped.csv')
-df_reshaped = pd.read_csv(data_path)
+df_reshaped = pd.read_csv('data/us-population-2010-2019-reshaped.csv')
 
 
 #######################
 # Sidebar
 with st.sidebar:
-    st.title('🩲 REVENUE PER YEAR')
+    st.title('🏂 US Population Dashboard')
 
     year_list = list(df_reshaped.year.unique())[::-1]
 
@@ -141,7 +140,7 @@ def calculate_population_difference(input_df, input_year):
 col = st.columns((1.5, 4.5, 2), gap='medium')
 
 with col[0]:
-    st.markdown('#### How much are they Spending')
+    st.markdown('#### Gains/Losses')
 
     df_population_difference_sorted = calculate_population_difference(df_reshaped, selected_year)
 
@@ -193,7 +192,7 @@ with col[0]:
         st.altair_chart(donut_chart_less)
 
 with col[1]:
-    st.markdown('#### Customer Distribution by Country')
+    st.markdown('#### Total Population')
 
     choropleth = make_choropleth(df_selected_year, 'states_code', 'population', selected_color_theme)
     st.plotly_chart(choropleth, use_container_width=True)
@@ -221,9 +220,9 @@ with col[2]:
                      )}
                  )
 
-    # with st.expander('About', expanded=True):
-    #     st.write('''
-    #         - Data: [U.S. Census Bureau](https://www.census.gov/data/datasets/time-series/demo/popest/2010s-state-total.html).
-    #         - :orange[**Gains/Losses**]: states with high inbound/ outbound migration for selected year
-    #         - :orange[**States Migration**]: percentage of states with annual inbound/ outbound migration > 50,000
-    #         ''')
+    with st.expander('About', expanded=True):
+        st.write('''
+            - Data: [U.S. Census Bureau](https://www.census.gov/data/datasets/time-series/demo/popest/2010s-state-total.html).
+            - :orange[**Gains/Losses**]: states with high inbound/ outbound migration for selected year
+            - :orange[**States Migration**]: percentage of states with annual inbound/ outbound migration > 50,000
+            ''')
