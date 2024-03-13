@@ -24,7 +24,7 @@ def main():
     st.markdown("<br>", unsafe_allow_html=True)
 
 
-    st.write("At The Look, we specialize in predictive analytics to help businesses understand their customers better.")
+    st.write("At The Look, we specialize in predictive analytics to help our business to understand our customers better.")
 
     st.markdown("<p style='text-align: center; font-size: 36px;'>👁️</p>", unsafe_allow_html=True)
 
