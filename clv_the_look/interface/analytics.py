@@ -40,18 +40,18 @@ def main():
     st.write("Using advanced machine learning algorithms and data analysis techniques, we provide actionable insights to optimize marketing strategies and enhance customer satisfaction.")
     st.write("🔔🔔 Stay tuned for our upcoming presentation 🔔🔔")
 
-  # Define the data
-    countries = ['China', 'United States', 'Brasil']
-    customer_numbers = [15653, 10276, 6719]
+  # # Define the data
+  #   countries = ['China', 'United States', 'Brasil']
+  #   customer_numbers = [15653, 10276, 6719]
 
-    # Create a DataFrame
-    df = pd.DataFrame({'Country': countries, 'Customer Numbers': customer_numbers})
+  #   # Create a DataFrame
+  #   df = pd.DataFrame({'Country': countries, 'Customer Numbers': customer_numbers})
 
-    # Create a bar plot using Plotly Express
-    fig = px.bar(df, x='Country', y='Customer', title='Top 3 Countries by Customer')
+  #   # Create a bar plot using Plotly Express
+  #   fig = px.bar(df, x='Country', y='Customer', title='Top 3 Countries by Customer')
 
-    # Display the plot in Streamlit
-    st.plotly_chart(fig)
+  #   # Display the plot in Streamlit
+  #   st.plotly_chart(fig)
 
 if __name__ == "__main__":
     main()
