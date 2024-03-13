@@ -32,33 +32,26 @@ def main():
 
     st.write("Our service focuses on predicting two key aspects:")
 
-    st.markdown("- **Customer Retention**: We analyze customer data to predict whether a new customer will stay with your business.")
-    st.markdown("- **Future Purchase Impact**: We assess the potential impact of a customer's future purchases on your business.")
+    st.markdown("- **Customer Retention**: We analyze customer data to predict whether a new customer will stay.")
+    st.markdown("- **Future Purchase Impact**: We assess the potential impact of a customer's future purchases.")
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    st.write("Using advanced machine learning algorithms and data analysis techniques, we provide actionable insights to optimize your marketing strategies and enhance customer satisfaction.")
-    st.write("🔔🔔 Stay tuned for our upcoming presentation, where we'll delve deeper into our predictive analytics solutions and showcase how they can benefit your business! 🔔🔔")
+    st.write("Using advanced machine learning algorithms and data analysis techniques, we provide actionable insights to optimize marketing strategies and enhance customer satisfaction.")
+    st.write("🔔🔔 Stay tuned for our upcoming presentation 🔔🔔")
 
-    # Load sample data (replace this with your actual data)
-    money = {
-         'Month': ['1', '2', '3', '4', '5'],
-         'Retention Rate': [30, 40, 90, 88, 100]
-    }
-    df = pd.DataFrame(money)
+  # Define the data
+    countries = ['China', 'United States', 'Brasil']
+    customer_numbers = [15653, 10276, 6719]
 
-     # Create a bar chart using Plotly
-    fig = px.bar(df, x='Month', y='Retention Rate', title='Customer Retention Rate Over Time',
-                  labels={'Retention Rate': 'Retention Rate (%)', 'Month': 'Month'})
+    # Create a DataFrame
+    df = pd.DataFrame({'Country': countries, 'Customer Numbers': customer_numbers})
 
-     # Customize layout
-    fig.update_layout(xaxis=dict(title='Time'),
-                       yaxis=dict(title='Retention Rate (%)'),
-                       plot_bgcolor='rgba(0,0,0,0)')
+    # Create a bar plot using Plotly Express
+    fig = px.bar(df, x='Country', y='Customer', title='Top 3 Countries by Customer')
 
-#     # Display the bar chart
+    # Display the plot in Streamlit
     st.plotly_chart(fig)
-
 
 if __name__ == "__main__":
     main()
