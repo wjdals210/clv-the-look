@@ -19,9 +19,12 @@ alt.themes.enable("dark")
 
 #######################
 # Load data
-df_reshaped = pd.read_csv('data/us-population-2010-2019-reshaped.csv')
+@st.cache
+def get_data():
+    df_reshaped = pd.read_csv('data/us-population-2010-2019-reshaped.csv')
+    return df_reshaped
 
-
+df_reshaped = get_data()  # Call the get_data function
 #######################
 # Sidebar
 with st.sidebar:
